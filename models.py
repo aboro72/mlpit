@@ -4,7 +4,12 @@ from sqlalchemy.orm import relationship, sessionmaker
 
 Base = declarative_base()
 DATABASE_FILE_PATH = 'db.sqlite3'
-
+class Admin(Base):
+    __tablename__ = 'admin'
+    id = Column(Integer, primary_key=True)
+    username = Column(String(255), unique=True)
+    password = Column(String(255))
+    permissions = Column(String(255))
 
 class Adresse(Base):
     __tablename__ = 'adresse'
@@ -53,7 +58,7 @@ class Schiene(Base):
     __tablename__ = 'schiene'
     id = Column(Integer, primary_key=True)
     name = Column(String(255), unique=True)
-    status = Column(String(255), nullable=False)
+    status = Column(Enum('Lager', 'Unterwegs', 'Zurücksetzen', 'Imagen', 'Versand', 'Standort', 'Rückholung', 'Weiterleitung', 'Selbstabholung'), nullable=False)
     drucker_fuellstand_a = Column(Integer, default=100)
     drucker_fuellstand_b = Column(Integer, default=100)
     nighthawk = Column(String(10), default='Beispiel: NH 01')
@@ -70,7 +75,7 @@ class Server(Base):
     __tablename__ = 'server'
     id = Column(Integer, primary_key=True)
     name = Column(String(255), unique=True)
-    status = Column(String(255), nullable=False, default='Zurücksetzen')
+    status = Column(Enum('Lager', 'Unterwegs', 'Zurücksetzen', 'Imagen', 'Versand', 'Standort', 'Rückholung', 'Weiterleitung', 'Selbstabholung'), nullable=False)
     image_id = Column(Integer, ForeignKey('festplatten_image_server.id'), nullable=True)
     image = relationship('FestplattenImageServer')
     bemerkung = Column(String(500), default="Fehler/Bemerkung")
